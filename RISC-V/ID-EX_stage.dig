@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ID_EX</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>clk_i,turn_off_i,Mem_to_Reg_in,Reg_Write_in,Mem_Write_in,Mem_Read_in,ALUsrc_in,branch_in,ALUOP_in:3,rs1_in:32,rs2_in:32,imm_gen_in:32,pc_mais_4_in:32,rd_in:5</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity ID_EX is
+    Port ( 
+        clk_i           : in  STD_LOGIC;
+        turn_off_i      : in  STD_LOGIC;
+        Mem_to_Reg_in   : in  STD_LOGIC;
+        Reg_Write_in    : in  STD_LOGIC;
+        Mem_Write_in    : in  STD_LOGIC;
+        Mem_Read_in     : in  STD_LOGIC;
+        ALUsrc_in       : in  STD_LOGIC;
+        branch_in       : in  STD_LOGIC;
+        ALUOP_in        : in  STD_LOGIC_VECTOR(2 downto 0);
+        rs1_in          : in  STD_LOGIC_VECTOR(31 downto 0);
+        rs2_in          : in  STD_LOGIC_VECTOR(31 downto 0);
+        imm_gen_in      : in  STD_LOGIC_VECTOR(31 downto 0);
+        pc_mais_4_in    : in  STD_LOGIC_VECTOR(31 downto 0);
+        rd_in           : in  STD_LOGIC_VECTOR(4 downto 0);
+        Mem_to_Reg_out  : out STD_LOGIC;
+        Reg_Write_out   : out STD_LOGIC;
+        Mem_Write_out   : out STD_LOGIC;
+        Mem_Read_out    : out STD_LOGIC;
+        ALUsrc_out      : out STD_LOGIC;
+        branch_out      : out STD_LOGIC;
+        ALUOP_out       : out STD_LOGIC_VECTOR(2 downto 0);
+        rs1_out         : out STD_LOGIC_VECTOR(31 downto 0);
+        rs2_out         : out STD_LOGIC_VECTOR(31 downto 0);
+        imm_gen_out     : out STD_LOGIC_VECTOR(31 downto 0);
+        pc_mais_4_out   : out STD_LOGIC_VECTOR(31 downto 0);
+        rd_out          : out STD_LOGIC_VECTOR(4 downto 0)
+    );
+end ID_EX;
+
+architecture Behavioral of ID_EX is
+begin
+    process(clk_i)
+    begin
+        if rising_edge(clk_i) then
+            if turn_off_i = &apos;0&apos; then
+                Mem_to_Reg_out  &lt;= Mem_to_Reg_in;
+                Reg_Write_out   &lt;= Reg_Write_in;
+                Mem_Write_out   &lt;= Mem_Write_in;
+                Mem_Read_out    &lt;= Mem_Read_in;
+                ALUsrc_out      &lt;= ALUsrc_in;
+                branch_out      &lt;= branch_in;
+                ALUOP_out       &lt;= ALUOP_in;
+                rs1_out         &lt;= rs1_in;
+                rs2_out         &lt;= rs2_in;
+                imm_gen_out     &lt;= imm_gen_in;
+                pc_mais_4_out   &lt;= pc_mais_4_in;
+                rd_out          &lt;= rd_in;
+            end if;
+        end if;
+    end process;
+end Behavioral;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>Mem_to_Reg_out,Reg_Write_out,Mem_Write_out,Mem_Read_out,ALUsrc_out,branch_out,ALUOP_out:3,rs1_out:32,rs2_out:32,imm_gen_out:32,pc_mais_4_out:32,rd_out:5</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>15</int>
+        </entry>
+      </elementAttributes>
+      <pos x="260" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>clk</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>off</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="160"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_reg</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>reg_wr</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_wr</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_rd</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ALUsrc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>branch</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ALUOP</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rs1</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rs2</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>imm_gen</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>pc_4</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rd</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_reg_out</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>reg_wrout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="160"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_wrout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>mem_rdout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ALUsrc_out</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>branch_out</string>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ALUOP_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rs1_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rs2_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>imm_gen_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>pc_4out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>rd_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="360"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="560" y="160"/>
+      <p2 x="640" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="160"/>
+      <p2 x="260" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="320"/>
+      <p2 x="640" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="320"/>
+      <p2 x="260" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="260"/>
+      <p2 x="640" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="260"/>
+      <p2 x="260" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="200"/>
+      <p2 x="640" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="200"/>
+      <p2 x="260" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="360"/>
+      <p2 x="640" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="360"/>
+      <p2 x="260" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="140"/>
+      <p2 x="260" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="140"/>
+      <p2 x="640" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="300"/>
+      <p2 x="640" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="300"/>
+      <p2 x="260" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="240"/>
+      <p2 x="640" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="240"/>
+      <p2 x="260" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="400"/>
+      <p2 x="260" y="400"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="180"/>
+      <p2 x="640" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="180"/>
+      <p2 x="260" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="340"/>
+      <p2 x="640" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="340"/>
+      <p2 x="260" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="280"/>
+      <p2 x="640" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="280"/>
+      <p2 x="260" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="220"/>
+      <p2 x="640" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="220"/>
+      <p2 x="260" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="380"/>
+      <p2 x="260" y="380"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

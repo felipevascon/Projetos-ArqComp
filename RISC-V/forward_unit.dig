@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>forward_unit</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>clock,WbRegWrite,MemRegWrite,ExRs1:5,ExRs2:5,MemRd:5,WbRd:5</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>12</int>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity forward_unit is
+    Port (
+        clock         : in  STD_LOGIC;
+        WbRegWrite    : in  STD_LOGIC;
+        MemRegWrite   : in  STD_LOGIC;
+        ExRs1         : in  STD_LOGIC_VECTOR(4 downto 0);
+        ExRs2         : in  STD_LOGIC_VECTOR(4 downto 0);
+        MemRd         : in  STD_LOGIC_VECTOR(4 downto 0);
+        WbRd          : in  STD_LOGIC_VECTOR(4 downto 0);
+        ForwardA      : out STD_LOGIC_VECTOR(1 downto 0);
+        ForwardB      : out STD_LOGIC_VECTOR(1 downto 0)
+    );
+end forward_unit;
+
+architecture Behavioral of forward_unit is
+begin
+    process(clock)
+    begin
+        if rising_edge(clock) then
+            -- Default (sem forwarding)
+            ForwardA &lt;= &quot;00&quot;;
+            ForwardB &lt;= &quot;00&quot;;
+
+            -- Encaminhamento para ForwardA
+            if (MemRegWrite = &apos;1&apos; and MemRd /= &quot;00000&quot; and MemRd = ExRs1) then
+                ForwardA &lt;= &quot;10&quot;;
+            elsif (WbRegWrite = &apos;1&apos; and WbRd /= &quot;00000&quot; and WbRd = ExRs1) then
+                ForwardA &lt;= &quot;01&quot;;
+            end if;
+
+            -- Encaminhamento para ForwardB
+            if (MemRegWrite = &apos;1&apos; and MemRd /= &quot;00000&quot; and MemRd = ExRs2) then
+                ForwardB &lt;= &quot;10&quot;;
+            elsif (WbRegWrite = &apos;1&apos; and WbRd /= &quot;00000&quot; and WbRd = ExRs2) then
+                ForwardB &lt;= &quot;01&quot;;
+            end if;
+        end if;
+    end process;
+end Behavioral;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>ForwardA:2,ForwardB:2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="400" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>clock</string>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>wbRegWrite</string>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>MemRegWrite</string>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ExRs1</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ExRs2</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>MemRd</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>wbRD</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="120" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ForwardA</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>2</int>
+        </entry>
+      </elementAttributes>
+      <pos x="700" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ForwardB</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>2</int>
+        </entry>
+      </elementAttributes>
+      <pos x="700" y="260"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="340" y="240"/>
+      <p2 x="400" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="180" y="320"/>
+      <p2 x="400" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="180"/>
+      <p2 x="360" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="260"/>
+      <p2 x="400" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="260"/>
+      <p2 x="700" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="340"/>
+      <p2 x="160" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="200"/>
+      <p2 x="400" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="200"/>
+      <p2 x="700" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="140" y="280"/>
+      <p2 x="400" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="140"/>
+      <p2 x="380" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="220"/>
+      <p2 x="400" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="220"/>
+      <p2 x="340" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="220"/>
+      <p2 x="660" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="300"/>
+      <p2 x="140" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="300"/>
+      <p2 x="400" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="120" y="380"/>
+      <p2 x="180" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="300"/>
+      <p2 x="160" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="220"/>
+      <p2 x="340" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="180" y="320"/>
+      <p2 x="180" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="220"/>
+      <p2 x="660" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="180"/>
+      <p2 x="360" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="140"/>
+      <p2 x="380" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="140" y="280"/>
+      <p2 x="140" y="300"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

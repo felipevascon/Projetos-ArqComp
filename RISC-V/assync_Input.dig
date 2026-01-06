@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>assync_input</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>sync_address:32,sync_data:32,assync_address:32,assync_data:32,assync</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>12</int>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity assync_input is
+    Port (
+        sync_address     : in  STD_LOGIC_VECTOR(31 downto 0);
+        sync_data        : in  STD_LOGIC_VECTOR(31 downto 0);
+        assync_address   : in  STD_LOGIC_VECTOR(31 downto 0);
+        assync_data      : in  STD_LOGIC_VECTOR(31 downto 0);
+        assync           : in  STD_LOGIC;
+
+        address_out      : out STD_LOGIC_VECTOR(31 downto 0);
+        data_output      : out STD_LOGIC_VECTOR(31 downto 0)
+    );
+end assync_input;
+
+architecture Behavioral of assync_input is
+begin
+    process(sync_address, sync_data, assync_address, assync_data, assync)
+    begin
+        if assync = &apos;1&apos; then
+            address_out &lt;= assync_address;
+            data_output &lt;= assync_data;
+        else
+            address_out &lt;= sync_address;
+            data_output &lt;= sync_data;
+        end if;
+    end process;
+end Behavioral;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>address_out:32,data_output:32</string>
+        </entry>
+      </elementAttributes>
+      <pos x="400" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>sync_address</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>sync_data</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>assync_address</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>assync_data</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>assync</string>
+        </entry>
+      </elementAttributes>
+      <pos x="160" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>address_out</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="680" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>data_output</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="680" y="240"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="380" y="240"/>
+      <p2 x="400" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="240"/>
+      <p2 x="360" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="240"/>
+      <p2 x="660" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="320"/>
+      <p2 x="240" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="260" y="320"/>
+      <p2 x="400" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="260"/>
+      <p2 x="400" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="260"/>
+      <p2 x="680" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="200"/>
+      <p2 x="380" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="200"/>
+      <p2 x="680" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="280"/>
+      <p2 x="400" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="360"/>
+      <p2 x="260" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="240" y="300"/>
+      <p2 x="400" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="240" y="300"/>
+      <p2 x="240" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="260" y="320"/>
+      <p2 x="260" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="200"/>
+      <p2 x="660" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="240"/>
+      <p2 x="360" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="680" y="240"/>
+      <p2 x="680" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="200"/>
+      <p2 x="380" y="240"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

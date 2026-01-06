@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>control</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>instruction:32,clock,reset</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>12</int>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity control is
+    Port (
+        instruction : in  STD_LOGIC_VECTOR(31 downto 0); -- 32 bits para instrução RV32I
+        clock       : in  STD_LOGIC;
+        reset       : in  STD_LOGIC;
+
+        ALUsrc1     : out STD_LOGIC;
+        ALUOp       : out STD_LOGIC_VECTOR(2 downto 0);  -- 3 bits para controle da ALU
+        ALUsrc      : out STD_LOGIC;
+        branch      : out STD_LOGIC;
+        MemRead     : out STD_LOGIC;
+        MemWrite    : out STD_LOGIC;
+        RegWrite    : out STD_LOGIC;
+        MemtoReg    : out STD_LOGIC;
+        jump        : out STD_LOGIC
+    );
+end control;
+
+architecture Behavioral of control is
+begin
+    process(clock, reset)
+    begin
+        if reset = &apos;1&apos; then
+            ALUsrc1  &lt;= &apos;0&apos;;
+            ALUOp    &lt;= &quot;000&quot;;
+            ALUsrc   &lt;= &apos;0&apos;;
+            branch   &lt;= &apos;0&apos;;
+            MemRead  &lt;= &apos;0&apos;;
+            MemWrite &lt;= &apos;0&apos;;
+            RegWrite &lt;= &apos;0&apos;;
+            MemtoReg &lt;= &apos;0&apos;;
+            jump     &lt;= &apos;0&apos;;
+
+        elsif rising_edge(clock) then
+            case instruction(6 downto 0) is  -- opcode RISC-V (7 bits menos significativos)
+                when &quot;0110011&quot; =&gt; -- R-type (add, sub, and, or, xor, sll, srl)
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;010&quot;;
+                    ALUsrc   &lt;= &apos;0&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;0010011&quot; =&gt; -- I-type (addi, andi, ori, xori, slli, srli)
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;010&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;0000011&quot; =&gt; -- lw
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;1&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;1&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;0100011&quot; =&gt; -- sw
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;1&apos;;
+                    RegWrite &lt;= &apos;0&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;1100011&quot; =&gt; -- branch (beq, bne)
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;001&quot;;
+                    ALUsrc   &lt;= &apos;0&apos;;
+                    branch   &lt;= &apos;1&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;0&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;1101111&quot; =&gt; -- jal
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;0&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;1&apos;;
+
+                when &quot;1100111&quot; =&gt; -- jalr
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;1&apos;;
+
+                when &quot;0110111&quot; =&gt; -- lui
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when &quot;0010111&quot; =&gt; -- auipc
+                    ALUsrc1  &lt;= &apos;1&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;1&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;1&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+
+                when others =&gt;
+                    ALUsrc1  &lt;= &apos;0&apos;;
+                    ALUOp    &lt;= &quot;000&quot;;
+                    ALUsrc   &lt;= &apos;0&apos;;
+                    branch   &lt;= &apos;0&apos;;
+                    MemRead  &lt;= &apos;0&apos;;
+                    MemWrite &lt;= &apos;0&apos;;
+                    RegWrite &lt;= &apos;0&apos;;
+                    MemtoReg &lt;= &apos;0&apos;;
+                    jump     &lt;= &apos;0&apos;;
+            end case;
+        end if;
+    end process;
+
+end Behavioral;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>ALUsrc1,ALUOp:3,ALUsrc,branch,MemRead,MemWrite,RegWrite,MemtoReg,jump</string>
+        </entry>
+      </elementAttributes>
+      <pos x="400" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>instruction</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ALUsrc1</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>clock</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>reset</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ALUOp</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>2</int>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ALUsrc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>branch</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>MemRead</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>MemWrite</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>RegWrite</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="480"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>MemToReg</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>jump</string>
+        </entry>
+      </elementAttributes>
+      <pos x="840" y="560"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="320" y="320"/>
+      <p2 x="360" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="820" y="320"/>
+      <p2 x="840" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="320"/>
+      <p2 x="780" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="740" y="480"/>
+      <p2 x="840" y="480"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="260"/>
+      <p2 x="400" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="260"/>
+      <p2 x="840" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="800" y="360"/>
+      <p2 x="840" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="360"/>
+      <p2 x="740" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="520"/>
+      <p2 x="840" y="520"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="300"/>
+      <p2 x="800" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="240"/>
+      <p2 x="400" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="240"/>
+      <p2 x="840" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="400"/>
+      <p2 x="840" y="400"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="400"/>
+      <p2 x="700" y="400"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="560"/>
+      <p2 x="840" y="560"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="340"/>
+      <p2 x="760" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="280"/>
+      <p2 x="340" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="280"/>
+      <p2 x="400" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="280"/>
+      <p2 x="820" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="440"/>
+      <p2 x="840" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="380"/>
+      <p2 x="720" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="800" y="300"/>
+      <p2 x="800" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="380"/>
+      <p2 x="720" y="520"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="260"/>
+      <p2 x="340" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="820" y="280"/>
+      <p2 x="820" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="740" y="360"/>
+      <p2 x="740" y="480"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="280"/>
+      <p2 x="360" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="840" y="260"/>
+      <p2 x="840" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="340"/>
+      <p2 x="760" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="320"/>
+      <p2 x="780" y="400"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="400"/>
+      <p2 x="700" y="560"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

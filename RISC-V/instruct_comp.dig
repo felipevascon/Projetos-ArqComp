@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>instruct_comp</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>op_code:7,const:7</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity instruct_comp is
+    port (
+        op_code    : in  STD_LOGIC_VECTOR(6 downto 0);
+        const : in  STD_LOGIC_VECTOR(6 downto 0);
+        output_1  : out STD_LOGIC
+    );
+end entity instruct_comp;
+
+architecture Behavioral of instruct_comp is
+begin
+    output_1 &lt;= &apos;1&apos; when (op_code = const) else &apos;0&apos;;
+end architecture Behavioral;</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>output_1</string>
+        </entry>
+      </elementAttributes>
+      <pos x="660" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>op_code</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>7</int>
+        </entry>
+      </elementAttributes>
+      <pos x="540" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>const</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>7</int>
+        </entry>
+      </elementAttributes>
+      <pos x="540" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>output_1</string>
+        </entry>
+      </elementAttributes>
+      <pos x="920" y="240"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="860" y="240"/>
+      <p2 x="920" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="540" y="260"/>
+      <p2 x="660" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="540" y="220"/>
+      <p2 x="660" y="220"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

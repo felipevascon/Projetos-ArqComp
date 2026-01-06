@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>register_file</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>clk:1,reset:1,reg_write:1,read_reg1:5,read_reg2:5,write_reg:5,write_data:32</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity register_file is
+    port (
+        clk, reset : in std_logic;
+        reg_write : in std_logic;
+        read_reg1, read_reg2, write_reg : in std_logic_vector(4 downto 0);
+        write_data : in std_logic_vector(31 downto 0);
+        read_data1, read_data2 : out std_logic_vector(31 downto 0)
+    );
+end entity;
+
+architecture behavioral of register_file is
+    -- Array de 32 registradores de 32 bits
+    type reg_array is array (0 to 31) of std_logic_vector(31 downto 0);
+    signal registers : reg_array;
+    
+begin
+    process(clk, reset)
+    begin
+        if reset = &apos;1&apos; then
+            -- Reset assíncrono: inicializa todos os registradores
+            for i in 0 to 31 loop
+                registers(i) &lt;= (others =&gt; &apos;0&apos;);
+            end loop;
+            
+        elsif rising_edge(clk) then
+            -- Escrita síncrona no estágio WB
+            if reg_write = &apos;1&apos; then
+                -- Não permite escrita no registrador x0
+                if write_reg /= &quot;00000&quot; then
+                    registers(to_integer(unsigned(write_reg))) &lt;= write_data;
+                end if;
+            end if;
+        end if;
+    end process;
+    
+    -- Leitura assíncrona (combinacional) no estágio ID
+    read_data1 &lt;= (others =&gt; &apos;0&apos;) when read_reg1 = &quot;00000&quot; else 
+                  registers(to_integer(unsigned(read_reg1)));
+    
+    read_data2 &lt;= (others =&gt; &apos;0&apos;) when read_reg2 = &quot;00000&quot; else 
+                  registers(to_integer(unsigned(read_reg2)));
+    
+end architecture;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>read_data1:32,read_data2:32</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>12</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1100" y="-540"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>clock</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-540"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>reset</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-500"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>register write</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-460"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>read register 1</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>read register 2</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>write register</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>write data</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1320" y="-300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>read data 1</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-700" y="-600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>read data 2</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-700" y="-560"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="-1320" y="-340"/>
+      <p2 x="-1160" y="-340"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-420"/>
+      <p2 x="-1200" y="-420"/>
+    </wire>
+    <wire>
+      <p1 x="-1140" y="-420"/>
+      <p2 x="-1100" y="-420"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-500"/>
+      <p2 x="-1240" y="-500"/>
+    </wire>
+    <wire>
+      <p1 x="-1220" y="-500"/>
+      <p2 x="-1100" y="-500"/>
+    </wire>
+    <wire>
+      <p1 x="-1240" y="-520"/>
+      <p2 x="-1100" y="-520"/>
+    </wire>
+    <wire>
+      <p1 x="-860" y="-520"/>
+      <p2 x="-820" y="-520"/>
+    </wire>
+    <wire>
+      <p1 x="-840" y="-600"/>
+      <p2 x="-700" y="-600"/>
+    </wire>
+    <wire>
+      <p1 x="-1160" y="-440"/>
+      <p2 x="-1100" y="-440"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-460"/>
+      <p2 x="-1220" y="-460"/>
+    </wire>
+    <wire>
+      <p1 x="-1180" y="-460"/>
+      <p2 x="-1100" y="-460"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-540"/>
+      <p2 x="-1100" y="-540"/>
+    </wire>
+    <wire>
+      <p1 x="-860" y="-540"/>
+      <p2 x="-840" y="-540"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-300"/>
+      <p2 x="-1140" y="-300"/>
+    </wire>
+    <wire>
+      <p1 x="-1320" y="-380"/>
+      <p2 x="-1180" y="-380"/>
+    </wire>
+    <wire>
+      <p1 x="-1200" y="-480"/>
+      <p2 x="-1100" y="-480"/>
+    </wire>
+    <wire>
+      <p1 x="-820" y="-560"/>
+      <p2 x="-700" y="-560"/>
+    </wire>
+    <wire>
+      <p1 x="-820" y="-560"/>
+      <p2 x="-820" y="-520"/>
+    </wire>
+    <wire>
+      <p1 x="-1220" y="-500"/>
+      <p2 x="-1220" y="-460"/>
+    </wire>
+    <wire>
+      <p1 x="-1140" y="-420"/>
+      <p2 x="-1140" y="-300"/>
+    </wire>
+    <wire>
+      <p1 x="-1160" y="-440"/>
+      <p2 x="-1160" y="-340"/>
+    </wire>
+    <wire>
+      <p1 x="-840" y="-600"/>
+      <p2 x="-840" y="-540"/>
+    </wire>
+    <wire>
+      <p1 x="-1240" y="-520"/>
+      <p2 x="-1240" y="-500"/>
+    </wire>
+    <wire>
+      <p1 x="-1180" y="-460"/>
+      <p2 x="-1180" y="-380"/>
+    </wire>
+    <wire>
+      <p1 x="-1200" y="-480"/>
+      <p2 x="-1200" y="-420"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

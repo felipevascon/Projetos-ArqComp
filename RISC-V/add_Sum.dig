@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>add_sum</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>data_1:32,data_2:32</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>12</int>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity add_sum is
+    Port (
+        data_1  : in  STD_LOGIC_VECTOR(31 downto 0);
+        data_2  : in  STD_LOGIC_VECTOR(31 downto 0);
+        result : out STD_LOGIC_VECTOR(31 downto 0)
+    );
+end add_sum;
+
+architecture Behavioral of add_sum is
+begin
+    process(data_1, data_2)
+    begin
+       result &lt;= std_logic_vector(signed(data_1) + signed(data_2));
+    end process;
+end Behavioral;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>result:32</string>
+        </entry>
+      </elementAttributes>
+      <pos x="400" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Result</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="700" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Data 1</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="280" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Data 2</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="280" y="300"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="280" y="240"/>
+      <p2 x="380" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="320"/>
+      <p2 x="400" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="280"/>
+      <p2 x="400" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="280" y="300"/>
+      <p2 x="380" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="300"/>
+      <p2 x="700" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="240"/>
+      <p2 x="380" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="300"/>
+      <p2 x="380" y="320"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
